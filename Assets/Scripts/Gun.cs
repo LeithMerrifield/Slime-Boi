@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public float m_fireRate = 1;
+    public GameObject m_bullet = null;
     public bool m_automatic = false;
+    public float m_fireRate = 1;
     public int m_damage = 100;
     public int m_thrust = 100;
+    public int m_spread = 1;
+    public int m_spreadDistance = 5;
+    public int m_recoilAmount = 5;
 
-    private float m_timeSinceLastShot = 0.0f;
     private bool m_hasFired = false;
-    public GameObject m_bullet = null;
+    private float m_timeSinceLastShot = 0.0f;
 
     public void FireGun()
     {
@@ -28,12 +31,32 @@ public class Gun : MonoBehaviour
             m_hasFired = true;
         }
 
-        var bullet = Instantiate(m_bullet);
-        bullet.SetActive(true);
-        bullet.transform.position = transform.position;
-        bullet.transform.rotation = Quaternion.identity;
+        int switchSide = -1;
 
-        
-        bullet.GetComponent<Rigidbody>().AddForce(transform.parent.forward * m_thrust, ForceMode.Impulse);
+        for(int i = 0; i < m_spread; ++i)
+        {
+            var bullet = Instantiate(m_bullet);
+            bullet.SetActive(true);
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = transform.parent.rotation;
+            bullet.transform.rotation = Quaternion.identity;
+            bullet.transform.Rotate(new Vector3(0,  switchSide * (i * m_spreadDistance),0));
+
+            switch(switchSide)
+            {
+                case -1:
+                    switchSide = 1;
+                    break;
+                default:
+                    switchSide = -1;
+                    break;
+            }
+
+            
+            bullet.GetComponent<Rigidbody>().AddForce(transform.parent.forward * m_thrust, ForceMode.Impulse);
+            print(transform.parent.forward);
+        }
+
+        transform.parent.parent.GetComponent<Rigidbody>().AddForce(-1 * (transform.parent.forward) * (m_spread * m_recoilAmount), ForceMode.Impulse);
     }
 }
