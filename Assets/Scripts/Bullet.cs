@@ -63,6 +63,7 @@ public class Bullet : MonoBehaviour
             m_smallBullets[i].GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity;
             m_smallBullets[i].GetComponent<Bullet>().m_isCopy = true;
             m_smallBullets[i].GetComponent<Rigidbody>().mass = 0;
+            // m_smallBullets[i].GetComponent<TrailRenderer>().enabled = false;
         }
     }
 }

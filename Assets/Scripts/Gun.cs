@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public GameObject m_canvas = null;
     public GameObject m_bullet = null;
     public bool m_automatic = false;
     public float m_fireRate = 1;
@@ -13,9 +14,15 @@ public class Gun : MonoBehaviour
     public int m_spreadDistance = 5;
     public int m_recoilAmount = 5;
 
+    [HideInInspector]public Vector3 m_originalScale;
+    [HideInInspector]public bool m_active = false;
     private bool m_hasFired = false;
     private float m_timeSinceLastShot = 0.0f;
 
+    private void Start()
+    {
+        m_originalScale = transform.localScale;
+    }
     public void FireGun()
     {
         if (m_hasFired && (Time.realtimeSinceStartup - m_fireRate) > m_timeSinceLastShot)
@@ -54,7 +61,6 @@ public class Gun : MonoBehaviour
 
             
             bullet.GetComponent<Rigidbody>().AddForce(transform.parent.forward * m_thrust, ForceMode.Impulse);
-            print(transform.parent.forward);
         }
 
         transform.parent.parent.GetComponent<Rigidbody>().AddForce(-1 * (transform.parent.forward) * (m_spread * m_recoilAmount), ForceMode.Impulse);
