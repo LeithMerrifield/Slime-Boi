@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public GameObject m_canvas = null;
+    public GameObject m_barrel = null;
     public GameObject m_bullet = null;
     public bool m_automatic = false;
     public float m_fireRate = 1;
@@ -15,14 +15,20 @@ public class Gun : MonoBehaviour
     public int m_recoilAmount = 5;
 
     [HideInInspector]public Vector3 m_originalScale;
-    [HideInInspector]public bool m_active = false;
+
     private bool m_hasFired = false;
     private float m_timeSinceLastShot = 0.0f;
+    [HideInInspector]public Rigidbody m_playerRigidBody = null;
 
     private void Start()
     {
         m_originalScale = transform.localScale;
+        if(transform.parent != null)
+        {
+            m_playerRigidBody = transform.parent.parent.parent.GetComponent<Rigidbody>();
+        }
     }
+
     public void FireGun()
     {
         if (m_hasFired && (Time.realtimeSinceStartup - m_fireRate) > m_timeSinceLastShot)
@@ -44,7 +50,7 @@ public class Gun : MonoBehaviour
         {
             var bullet = Instantiate(m_bullet);
             bullet.SetActive(true);
-            bullet.transform.position = transform.position;
+            bullet.transform.position = m_barrel.transform.position;
             bullet.transform.rotation = transform.parent.rotation;
             bullet.transform.rotation = Quaternion.identity;
             bullet.transform.Rotate(new Vector3(0,  switchSide * (i * m_spreadDistance),0));
@@ -63,6 +69,12 @@ public class Gun : MonoBehaviour
             bullet.GetComponent<Rigidbody>().AddForce(transform.parent.forward * m_thrust, ForceMode.Impulse);
         }
 
-        transform.parent.parent.GetComponent<Rigidbody>().AddForce(-1 * (transform.parent.forward) * (m_spread * m_recoilAmount), ForceMode.Impulse);
+        if (m_playerRigidBody.velocity.magnitude > m_playerRigidBody.GetComponent<Character>().m_speedLimit)
+        {
+            m_playerRigidBody.velocity = m_playerRigidBody.velocity.normalized * m_playerRigidBody.GetComponent<Character>().m_speedLimit;
+            return;
+        }
+
+        transform.parent.parent.parent.GetComponent<Rigidbody>().AddForce(-1 * (m_barrel.transform.forward) * m_recoilAmount, ForceMode.Impulse);
     }
 }

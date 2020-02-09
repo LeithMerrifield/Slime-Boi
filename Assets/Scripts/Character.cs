@@ -3,26 +3,68 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Character : MonoBehaviour
+public class Character : Humanoid
 {
-    public Gun m_gun = null;
-    public GameObject m_hand = null;
-    public int m_health = 100;
+    public GameObject m_subHand = null;
+    public GameObject m_landingDebris = null;
+    public float m_speedLimit = 5.0f;
     public Camera m_camera = null;
     public float m_pickupRadius = 5.0f;
+    public int m_debrisAmount = 5;
+    public float m_speedToDebris = 5.0f;
 
+
+    private Rigidbody m_rb = null;
     private GameObject m_previousGun = null;
+    private bool m_landingFlag = false;
 
-    void Start()
+    private void Start()
     {
-        m_gun.m_active = true;
+        m_rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         Pickup();
         MouseMovement();
-        Fire();
+
+        if(m_gun != null)
+            Fire();
+        RaycastDown();
+    }
+
+    IEnumerator LandingCooldown()
+    {
+        yield return new WaitForSeconds(1);
+        m_landingFlag = false;
+    }
+
+    void RaycastDown()
+    {
+        if (m_landingFlag)
+            return;
+
+        var localVel = transform.InverseTransformDirection(m_rb.velocity);
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position,-1 * transform.up,out hit,transform.localScale.magnitude / 2.0f + 0.1f))
+        {
+            Debug.DrawRay(transform.position, -1 * transform.up * hit.distance, Color.green);
+
+            if(m_landingDebris != null && localVel.y < -5.0f)
+            {
+                var rightCorner = new Vector3(transform.localPosition.x + (transform.localScale.magnitude / 2.0f) - 0.2f, transform.localPosition.y + (-(transform.localScale.magnitude / 2.0f)), 0.0f);
+                var leftCorner = new Vector3(transform.localPosition.x + (-(transform.localScale.magnitude / 2.0f)) + 0.2f, transform.localPosition.y + ( -(transform.localScale.magnitude / 2.0f)), 0.0f);
+
+                for(int i = 0; i < m_debrisAmount; ++i)
+                {
+                    var left =  Instantiate(m_landingDebris,leftCorner,Quaternion.identity);
+                    var right = Instantiate(m_landingDebris,rightCorner,Quaternion.identity);
+
+                }
+                m_landingFlag = true;
+                StartCoroutine(LandingCooldown());
+            }
+        }
     }
 
     void MouseMovement()
@@ -58,10 +100,16 @@ public class Character : MonoBehaviour
         int count = 0;
         foreach(var item in objects)
         {
-            if(item.tag == "Gun" && item.gameObject != m_gun.gameObject)
+            if(item.tag == "Gun" && m_gun == null)
             {
-                guns.Add(item.gameObject);
+                    guns.Add(item.gameObject);
             }
+            else if(m_gun != null)
+            {
+                if(item.tag == "Gun" && item.gameObject != m_gun.gameObject)
+                    guns.Add(item.gameObject);
+            }
+
             count++;
         }
 
@@ -69,7 +117,7 @@ public class Character : MonoBehaviour
         if(guns.Count == 0)
         {
             if(m_previousGun != null)
-                m_previousGun.GetComponent<Gun>().m_canvas.SetActive(false);
+                m_previousGun.GetComponent<Outline>().enabled = false;
             return;
         }
         
@@ -82,14 +130,14 @@ public class Character : MonoBehaviour
             {
                 if(Vector3.Distance(guns[i].transform.position,transform.position) < Vector3.Distance(closestGun.transform.position,transform.position))
                 {
-                    closestGun.GetComponent<Gun>().m_canvas.SetActive(false);
+                    closestGun.GetComponent<Outline>().enabled = false;
                     closestGun = guns[i];
                 }
             }
         }
 
         //closest gun ui activate
-        closestGun.GetComponent<Gun>().m_canvas.SetActive(true);
+        closestGun.GetComponent<Outline>().enabled = true;
         m_previousGun = closestGun.gameObject;
 
         // Fak this stupid pick up shit
@@ -98,13 +146,18 @@ public class Character : MonoBehaviour
             var temp = m_gun.transform.position;
             m_gun.transform.parent = null;
             m_gun.transform.position = closestGun.transform.position;
-            m_gun.transform.eulerAngles = new Vector3(0.0f,-90.0f,0.0f);
+            m_gun.GetComponent<Outline>().enabled = true;
+            m_gun.GetComponent<Rotate>().enabled = true;
+
 
             m_gun = closestGun.GetComponent<Gun>();
-            m_gun.transform.parent = m_hand.transform;
-            m_gun.gameObject.transform.rotation = Quaternion.identity;
-            m_gun.transform.position = temp;
+            m_gun.transform.parent = m_subHand.transform;
+            m_gun.transform.localEulerAngles = Vector3.zero;
+            m_gun.transform.localPosition = Vector3.zero;
             m_gun.transform.localScale = m_gun.m_originalScale;
+            m_gun.GetComponent<Outline>().enabled = false;
+            m_gun.GetComponent<Rotate>().enabled = false;
+            m_gun.m_playerRigidBody = m_rb;
         }
     }
 
