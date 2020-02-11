@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Gun
   - Lava
+  - BulletFragment
+  - Sword
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - Gun
   - Player
   - Wall
-  - 
+  - Sword
   - 
   - 
   - 
