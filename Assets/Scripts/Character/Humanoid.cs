@@ -6,10 +6,17 @@ public class Humanoid : MonoBehaviour
 {
     [Header("Base Humanoid Variables")]
     public int m_health = 100;
-    public WeaponBase m_gun = null;
+    public WeaponBase m_weapon = null;
     public GameObject m_hand = null;
     public bool m_invincible = false;
     public bool m_invisible = false;
+
+    public HUMANOIDTYPE m_type;
+
+    protected virtual void Start()
+    {
+
+    }
 
     public void TakeDamage(int damage)
     {
@@ -36,37 +43,42 @@ public class Humanoid : MonoBehaviour
 
     protected virtual void Attack()
     {
-        //if (m_gun.m_automatic)
-        //{
-        //    if (Input.GetKey(KeyCode.Mouse0))
-        //    {
-        //        m_gun.Attack();
-        //    }
-        //}
-        //else
-        //{
-        //    if (Input.GetKeyDown(KeyCode.Mouse0))
-        //    {
-        //        m_gun.Attack();
-        //    }
-        //}
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if(m_weapon.m_isAutomatic)
         {
-            m_gun.Attack();
+            if (Input.GetKey(KeyCode.Mouse0))
+                m_weapon.Attack();
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                m_weapon.Attack();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.tag == "Bullet")
+        Collider myCollider = collision.contacts[0].thisCollider;
+
+        if (collision.transform.tag == "Bullet")
         {
-            Collider myCollider = collision.contacts[0].thisCollider;
             if (!(myCollider.tag == "Sword"))
                 TakeDamage(collision.gameObject.GetComponent<Bullet>().m_gun.m_damage);
             else
                 collision.gameObject.GetComponent<Bullet>().Explode();
             Destroy(collision.gameObject); // TODO
+            return;
+        }
+
+        if(myCollider.transform.tag == "Sword" && collision.collider.gameObject.tag == "Enemy")
+        {
+            Destroy(collision.gameObject);
+            return;
         }
     }
+}
+
+public enum HUMANOIDTYPE
+{
+    PLAYER = 0,
+    ENEMY = 1
 }

@@ -135,9 +135,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0137f4fac16793d47b19a64bbfadf555, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_object: {fileID: 0}
   m_rotationSpeed: 1
   m_amplitude: 0.001
   m_frequency: 1
+  m_rotateAngled: 0
 --- !u!114 &3387782988928585700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,13 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 100
+  m_isAutomatic: 1
   m_isActive: 0
   m_playerRigidBody: {fileID: 0}
   m_originalScale: {x: 0, y: 0, z: 0}
   m_barrel: {fileID: 3387782988790973502}
   m_bullet: {fileID: 5890331086264117808, guid: 65162bf6db193490699a737710e44538,
     type: 3}
-  m_automatic: 1
   m_fireRate: 0.1
   m_thrust: 25
   m_spread: 1

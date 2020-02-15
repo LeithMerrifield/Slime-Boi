@@ -6,7 +6,6 @@ public class Gun : WeaponBase
 {
     public GameObject m_barrel = null;
     public GameObject m_bullet = null;
-    public bool m_automatic = false;
     public float m_fireRate = 1;
     public int m_thrust = 100;
     public int m_spread = 1;
@@ -18,6 +17,7 @@ public class Gun : WeaponBase
 
     public override void Attack()
     {
+        // if the time since you last fired is less than the firerate, dont fire
         if (m_hasFired && (Time.realtimeSinceStartup - m_fireRate) > m_timeSinceLastShot)
         {
             m_hasFired = false;
@@ -43,6 +43,7 @@ public class Gun : WeaponBase
             bullet.transform.rotation = Quaternion.identity;
             bullet.transform.Rotate(new Vector3(0,  switchSide * (i * m_spreadDistance),0));
 
+            // Not sure if this even works :/
             switch(switchSide)
             {
                 case -1:

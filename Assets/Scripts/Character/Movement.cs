@@ -12,21 +12,30 @@ public class Movement : MonoBehaviour
     private Rigidbody m_rb = null;
 
     private bool m_space = false;
-    // Start is called before the first frame update
+
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         var h = Input.GetAxisRaw("Horizontal");
         h *= m_speed;
 
         var velocity = new Vector3(h, m_rb.velocity.y, m_rb.velocity.z);
-
         m_rb.velocity = velocity;
+
+        // Grabs velocity in a way that shows what direction you are heading
+        var localVel = transform.InverseTransformDirection(m_rb.velocity); 
+
+
+        // Only clamps speed if its not downward otherwise it would look like you're floating
+        if(!(localVel.y < 0))
+        {
+            m_rb.velocity = Vector3.ClampMagnitude(m_rb.velocity, 10f);
+        }
+
 
         if (m_space)
         {

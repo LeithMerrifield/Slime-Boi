@@ -8,6 +8,7 @@ public class Enemy : Humanoid
     public LayerMask m_layerMask;
     public float m_detectRange = 10.0f;
     public int m_detectAngle = 10;
+    public GameObject m_player = null;
 
     private bool m_targetFound = false;
     private GameObject m_target = null;
@@ -22,8 +23,10 @@ public class Enemy : Humanoid
         }
     }
 
-    public void Start()
+    protected override void Start()
     {
+        base.Start();
+        m_type = HUMANOIDTYPE.ENEMY;
         StartCoroutine(Firing());
     }
 
@@ -36,27 +39,40 @@ public class Enemy : Humanoid
     }
     protected override void Attack()
     {
-        m_gun.Attack();
+        m_weapon.Attack();
     }
 
     void FindPlayer()
     {
+        var playerDirection = m_player.transform.position - transform.position;
         int loop = 360 / m_detectAngle;
-        for(int i = 0; i < loop; i++)
-        {
-            var angle = i  * (m_detectAngle);
-            var lDirection = new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), Mathf.Cos(Mathf.Deg2Rad * angle));
+        //for(int i = 0; i < loop; i++)
+        //{
+        //    var angle = i  * (m_detectAngle);
+        //    var lDirection = new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), Mathf.Cos(Mathf.Deg2Rad * angle));
 
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, lDirection, out hit, m_detectRange, m_layerMask))
+        //    RaycastHit hit;
+        //    if (Physics.Raycast(transform.position, lDirection, out hit, m_detectRange, m_layerMask))
+        //    {
+        //        Debug.DrawRay(transform.position, lDirection * hit.distance, Color.green);
+        //        if(hit.collider.gameObject.tag == "Player" && !hit.collider.gameObject.GetComponent<Humanoid>().m_invisible)
+        //        {
+        //            m_targetFound = true;
+        //            m_target = hit.collider.gameObject;
+        //            return;
+        //        }
+        //    }
+        //}
+
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, playerDirection, out hit, m_detectRange, m_layerMask))
+        {
+            Debug.DrawRay(transform.position, playerDirection * hit.distance, Color.green);
+            if (hit.collider.gameObject.tag == "Player" && !hit.collider.gameObject.GetComponent<Humanoid>().m_invisible)
             {
-                Debug.DrawRay(transform.position, lDirection * hit.distance, Color.green);
-                if(hit.collider.gameObject.tag == "Player" && !hit.collider.gameObject.GetComponent<Humanoid>().m_invisible)
-                {
-                    m_targetFound = true;
-                    m_target = hit.collider.gameObject;
-                    return;
-                }
+                m_targetFound = true;
+                m_target = hit.collider.gameObject;
+                return;
             }
         }
 

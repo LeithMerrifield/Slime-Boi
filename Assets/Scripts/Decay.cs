@@ -8,10 +8,10 @@ public class Decay : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Poop());
+        StartCoroutine(DecayObject());
     }
 
-    IEnumerator Poop()
+    IEnumerator DecayObject()
     {
         yield return new WaitForSeconds(m_timeTillDecay);
         Destroy(gameObject);

@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviour
 {
     public int m_damage = 100;
+    public bool m_isAutomatic = false;
     [HideInInspector] public bool m_isActive = false;
     [HideInInspector] public Rigidbody m_playerRigidBody = null;
     [HideInInspector] public Vector3 m_originalScale;

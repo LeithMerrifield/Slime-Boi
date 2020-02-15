@@ -22,8 +22,10 @@ public class Character : Humanoid
     private GameObject m_previousGun = null;
     private bool m_landingFlag = false;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+        m_type = HUMANOIDTYPE.PLAYER;
         m_rb = GetComponent<Rigidbody>();
     }
 
@@ -32,7 +34,7 @@ public class Character : Humanoid
         Pickup();
         MouseMovement();
 
-        if(m_gun != null)
+        if(m_weapon != null)
             Attack();
         //RaycastDown();
     }
@@ -105,13 +107,13 @@ public class Character : Humanoid
         int count = 0;
         foreach(var item in objects)
         {
-            if((item.tag == "Gun" || item.tag == "Sword") && m_gun == null)
+            if((item.tag == "Gun" || item.tag == "Sword") && m_weapon == null)
             {
                     guns.Add(item.gameObject);
             }
-            else if(m_gun != null)
+            else if(m_weapon != null)
             {
-                if((item.tag == "Gun" || item.tag == "Sword") && item.gameObject != m_gun.gameObject)
+                if((item.tag == "Gun" || item.tag == "Sword") && item.gameObject != m_weapon.gameObject)
                     guns.Add(item.gameObject);
             }
 
@@ -150,36 +152,35 @@ public class Character : Humanoid
         closestGun.GetComponent<Outline>().enabled = true;
         m_previousGun = closestGun.gameObject;
 
-        // Fak this stupid pick up shit
         if(Input.GetKeyDown(KeyCode.E))
         {
-            var temp = m_gun.transform.position;
-            m_gun.transform.parent = null;
-            m_gun.transform.position = closestGun.transform.position;
-            m_gun.GetComponent<Outline>().enabled = true;
-            m_gun.GetComponent<Rotate>().enabled = true;
+            var temp = m_weapon.transform.position;
+            m_weapon.transform.parent = null;
+            m_weapon.transform.position = closestGun.transform.position;
+            m_weapon.GetComponent<Outline>().enabled = true;
+            m_weapon.GetComponent<Rotate>().enabled = true;
 
-            if(m_gun.GetComponent<Animator>() != null)
+            if(m_weapon.GetComponent<Animator>() != null)
             {
-                m_gun.GetComponent<Animator>().enabled = false;
+                m_weapon.GetComponent<Animator>().enabled = false;
             }
 
-            m_gun.m_isActive = false;
+            m_weapon.m_isActive = false;
 
 
-            m_gun = closestGun.GetComponent<WeaponBase>();
-            m_gun.transform.parent = m_subHand.transform;
-            m_gun.transform.localEulerAngles = Vector3.zero;
-            m_gun.transform.localPosition = Vector3.zero;
-            m_gun.transform.localScale = m_gun.m_originalScale;
-            m_gun.GetComponent<Outline>().enabled = false;
-            m_gun.GetComponent<Rotate>().enabled = false;
-            m_gun.m_playerRigidBody = m_rb;
-            m_gun.m_isActive = true;
+            m_weapon = closestGun.GetComponent<WeaponBase>();
+            m_weapon.transform.parent = m_subHand.transform;
+            m_weapon.transform.localEulerAngles = Vector3.zero;
+            m_weapon.transform.localPosition = Vector3.zero;
+            m_weapon.transform.localScale = m_weapon.m_originalScale;
+            m_weapon.GetComponent<Outline>().enabled = false;
+            m_weapon.GetComponent<Rotate>().enabled = false;
+            m_weapon.m_playerRigidBody = m_rb;
+            m_weapon.m_isActive = true;
 
-            if (m_gun.GetComponent<Animator>() != null)
+            if (m_weapon.GetComponent<Animator>() != null)
             {
-                m_gun.GetComponent<Animator>().enabled = true;
+                m_weapon.GetComponent<Animator>().enabled = true;
             }
         }
     }
