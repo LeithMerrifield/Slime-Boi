@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -982,7 +982,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.97
+      value: 0.8801
       objectReference: {fileID: 0}
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
@@ -1042,7 +1042,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.1968846
+      value: 4.0167375
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc208281af7b4eb5b6256ca4caa36ad, type: 3}
@@ -1986,7 +1986,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.93
+      value: -1.8839
       objectReference: {fileID: 0}
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
@@ -2046,7 +2046,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 26.971897
+      value: 27.023071
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc208281af7b4eb5b6256ca4caa36ad, type: 3}
@@ -2365,7 +2365,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.97
+      value: 0.8869
       objectReference: {fileID: 0}
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
@@ -2425,7 +2425,7 @@ PrefabInstance:
     - target: {fileID: 5161331934277895083, guid: 0fc208281af7b4eb5b6256ca4caa36ad,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.1968846
+      value: 4.030688
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc208281af7b4eb5b6256ca4caa36ad, type: 3}

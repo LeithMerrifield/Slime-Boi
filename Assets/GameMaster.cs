@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameMaster : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class GameMaster : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F1))
         {
             m_cheatMenu.SetActive(!m_cheatMenu.activeSelf);
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

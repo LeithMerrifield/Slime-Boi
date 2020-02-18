@@ -36,7 +36,7 @@ public class Character : Humanoid
 
         if(m_weapon != null)
             Attack();
-        //RaycastDown();
+        RaycastDown();
     }
 
     IEnumerator LandingCooldown()
@@ -56,22 +56,25 @@ public class Character : Humanoid
         {
             Debug.DrawRay(transform.position, -1 * transform.up * hit.distance, Color.green);
 
-            if(m_landingDebris != null && localVel.y < -5.0f)
-            {
-                var rightCorner = new Vector3(transform.localPosition.x + (transform.localScale.magnitude / 2.0f) - 0.2f, transform.localPosition.y + (-(transform.localScale.magnitude / 2.0f)), 0.0f);
-                var leftCorner = new Vector3(transform.localPosition.x + (-(transform.localScale.magnitude / 2.0f)) + 0.2f, transform.localPosition.y + ( -(transform.localScale.magnitude / 2.0f)), 0.0f);
+            m_movementState = MOVEMENTSTATE.GROUNDED;
+            return;
+            //if(m_landingDebris != null && localVel.y < -5.0f)
+            //{
+            //    var rightCorner = new Vector3(transform.localPosition.x + (transform.localScale.magnitude / 2.0f) - 0.2f, transform.localPosition.y + (-(transform.localScale.magnitude / 2.0f)), 0.0f);
+            //    var leftCorner = new Vector3(transform.localPosition.x + (-(transform.localScale.magnitude / 2.0f)) + 0.2f, transform.localPosition.y + ( -(transform.localScale.magnitude / 2.0f)), 0.0f);
 
-                for(int i = 0; i < m_debrisAmount; ++i)
-                {
-                    var left =  Instantiate(m_landingDebris,leftCorner,Quaternion.identity);
-                    var right = Instantiate(m_landingDebris,rightCorner,Quaternion.identity);
+            //    for(int i = 0; i < m_debrisAmount; ++i)
+            //    {
+            //        var left =  Instantiate(m_landingDebris,leftCorner,Quaternion.identity);
+            //        var right = Instantiate(m_landingDebris,rightCorner,Quaternion.identity);
 
-                }
+            //    }
 
-                m_landingFlag = true;
-                StartCoroutine(LandingCooldown());
-            }
+            //    m_landingFlag = true;
+            //    StartCoroutine(LandingCooldown());
+            //}
         }
+        m_movementState = MOVEMENTSTATE.JUMPING;
     }
 
     void MouseMovement()

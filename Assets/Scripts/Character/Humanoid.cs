@@ -11,11 +11,12 @@ public class Humanoid : MonoBehaviour
     public bool m_invincible = false;
     public bool m_invisible = false;
 
+    [HideInInspector] public MOVEMENTSTATE m_movementState; 
     public HUMANOIDTYPE m_type;
 
     protected virtual void Start()
     {
-
+        m_movementState = MOVEMENTSTATE.GROUNDED;
     }
 
     public void TakeDamage(int damage)
@@ -81,4 +82,10 @@ public enum HUMANOIDTYPE
 {
     PLAYER = 0,
     ENEMY = 1
+}
+
+public enum MOVEMENTSTATE
+{
+    GROUNDED = 0,
+    JUMPING = 1
 }
